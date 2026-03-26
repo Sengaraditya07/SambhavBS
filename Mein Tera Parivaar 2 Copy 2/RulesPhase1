@@ -1,0 +1,390 @@
+# 📘 MEIN TERA PARIVAAR
+## REQUEST / EXCHANGE SYSTEM – COMPLETE RULES (Phase-1)
+
+---
+
+## 🔐 GENERAL (GLOBAL) RULES
+
+1. **Platform type**
+
+   * Ye platform **donation based** hai.
+   * ❌ Koi money / payment / cart system nahi hoga.
+
+2. **Authentication**
+
+   * Bina login koi bhi user:
+
+     * item add nahi kar sakta
+     * request nahi kar sakta
+
+3. **Account approval**
+
+   * Signup ke baad user ka status:
+
+     * `pending`
+   * Admin approval ke baad:
+
+     * `approved`
+   * Pending user:
+
+     * login kar sakta hai
+     * items dekh sakta hai
+     * ❌ request / add item nahi kar sakta
+
+---
+
+## 🧑‍🎁 DONATION (ITEM) RULES
+
+1. **Item visibility**
+
+   * Sirf wahi items public list me dikhenge jo:
+
+     * `approved`
+     * `is_active = True`
+     * `available_quantity > 0`
+
+2. **Item approval**
+
+   * Har item pehle admin ke paas approval ke liye jaayega.
+   * Admin:
+
+     * approve
+     * reject (with reason)
+
+3. **Quantity**
+
+   * Har item ke paas:
+
+     * `total_quantity`
+     * `available_quantity`
+
+---
+
+## 🧑‍💼 RECEIVER (REQUEST KARNE WALA USER) – RULES
+
+1. **Login & approval mandatory**
+
+   * Receiver ko:
+
+     * logged in hona chahiye
+     * `approved` user hona chahiye
+
+2. **Give-to-Get rule**
+
+   * Receiver tabhi request kar sakta hai jab:
+
+     * usne **minimum 2 approved & active items donate ke liye post kiye hon**
+   * Jab tak ye condition complete nahi hoti:
+
+     * receive (request) allowed nahi hoga
+
+3. **Same item request limit**
+
+   * Ek user:
+
+     * same item ke liye **maximum 2 active requests** hi rakh sakta hai
+   * Active request ka matlab:
+
+     * `pending`
+     * `accepted`
+
+4. **Overall request limit**
+
+   * Ek user:
+
+     * ek time me **maximum 5 active requests** rakh sakta hai
+   * `rejected` aur `completed` requests is limit me count nahi hongi
+
+5. **Quantity input**
+
+   * Receiver request ke time:
+
+     * quantity select kar sakta hai
+   * Ye quantity:
+
+     * sirf **demand** hai
+     * guarantee nahi
+
+6. **Request creation**
+
+   * Request create hone par default status:
+
+     * `pending`
+
+---
+
+## 🧑‍🎁 DONOR (ITEM DENE WALA USER) – RULES
+
+1. **Request visibility**
+
+   * Donor sirf:
+
+     * apne items par aayi requests dekh sakta hai
+   * Donor ko receiver ka limited info dikhega:
+
+     * name
+     * city
+
+2. **Accept / Reject**
+
+   * Donor kisi bhi request ko:
+
+     * accept kar sakta hai
+     * reject kar sakta hai
+
+3. **Partial accept**
+
+   * Donor partial accept kar sakta hai:
+
+     * agar receiver ne 2 maanga
+     * donor 1 hi dena chahe
+   * Condition:
+
+     * `approved_quantity ≤ requested_quantity`
+
+4. **Partial accept behaviour**
+
+   * Partial accept hone par:
+
+     * request **fulfilled / complete** mani jaayegi
+   * Remaining quantity ke liye:
+
+     * receiver ko **naya request banana padega**
+
+5. **Decision change**
+
+   * Donor apna decision change kar sakta hai:
+
+     * `accept ↔ reject`
+   * ❌ Lekin sirf tab tak jab tak request:
+
+     * `completed` state me na ho
+
+6. **Final authority**
+
+   * Donor ka decision final hoga.
+   * Receiver donor ko force nahi kar sakta.
+
+---
+
+## 🔄 REQUEST STATUS DEFINITIONS
+
+1. **pending**
+
+   * Request create ho chuki hai
+   * Donor ka decision baaki hai
+
+2. **accepted**
+
+   * Donor ne request accept kar li
+   * Quantity (full ya partial) decide ho chuki hai
+
+3. **rejected**
+
+   * Donor ne request reject kar di
+
+4. **completed**
+
+   * Request fulfill ho chuki hai
+   * Ab koi change allowed nahi
+
+---
+
+## 🔔 NOTIFICATION & VISIBILITY (Phase-1)
+
+1. **Donor notification**
+
+   * Donor ko request ka pata:
+
+     * **Incoming Requests page** se chalega
+
+2. **Receiver notification**
+
+   * Receiver ko accept/reject ka pata:
+
+     * **My Requests page** me status change se chalega
+
+3. **Phase-1 limitation**
+
+   * ❌ Email
+   * ❌ SMS
+   * ❌ WhatsApp
+   * Status change itself = notification
+
+---
+
+## 🧠 CORE DESIGN PRINCIPLES (LOCK THESE)
+
+* Ye system **cart based nahi** hai
+* Ye **trust-based donation matching system** hai
+* Login ≠ Approval
+* Approval ≠ Request guarantee
+* Quantity demand hai, donor ka decision final hai
+
+---
+
+📘 SYSTEM RULES – FINAL VERSION
+(Phase-1 | Mein Tera Parivaar)
+🧩 1️⃣ QUANTITY & STOCK MANAGEMENT RULES
+1. Quantity reduction rule
+
+Item ki quantity tabhi reduce hogi jab donor request accept karega.
+
+Reduce hone wali quantity:
+
+approved_quantity (jitni donor actually donate kare).
+
+❌ Request create hone par quantity reduce nahi hogi
+❌ Pending requests stock block nahi karengi
+
+2. Item visibility after stock change
+
+Agar available_quantity > 0:
+
+Item public list aur detail page par visible rahega.
+
+Agar available_quantity = 0:
+
+Item visible rahega
+
+❌ Lekin request button disabled ho jaayega.
+
+Reason: transparency + fair browsing
+(item gayab nahi hota, bas unavailable hota hai)
+
+🧩 2️⃣ FAIRNESS & PRIORITY RULES
+3. First-Come-First-Serve definition
+
+Jo receiver pehle request karega, usko pehle decision milega.
+
+“Decision” ka matlab:
+
+donor us request ko sabse pehle dekhega
+
+system requests ko creation time ke order me present karega
+
+❌ Ye guarantee nahi hai ki pehla request accept hi hoga
+✔️ Sirf decision order fair hoga
+
+4. Multiple requests vs limited quantity (Q5 – refined)
+
+Donor ko:
+
+sabhi pending requests dikhenge
+
+System donor ko restrict nahi karega ki:
+
+“sirf itni hi requests dikhao”
+
+Final authority donor ke paas rahegi
+System sirf order maintain karega
+
+🧩 3️⃣ AUTO SYSTEM BEHAVIOUR RULES
+5. Auto-reject behaviour
+
+Jab donor ek request accept karta hai:
+
+Agar us accept ke baad item ki available_quantity = 0 ho jaaye:
+
+Us item ki baaki saari pending requests automatically reject ho jaayengi.
+
+Reject reason (system generated):
+
+“Item no longer available”
+
+6. Cooldown period after rejection
+
+Agar receiver ki request reject ho jaati hai:
+
+To wo receiver:
+
+turant usi item ke liye naya request nahi bana sakta
+
+Cooldown rule:
+
+24 hours cooldown per item per user
+
+Ye spam aur pressure request ko rokne ke liye hai
+
+🧩 4️⃣ REQUEST LIFECYCLE – SYSTEM CONTROLLED
+7. Request status transitions (system enforced)
+Current Status	Allowed Next
+pending	accepted / rejected
+accepted	completed
+rejected	(no change)
+completed	❌ final (locked)
+
+completed ke baad:
+
+❌ donor decision change nahi kar sakta
+
+❌ quantity rollback nahi hogi
+
+🔒 CORE SYSTEM PRINCIPLES (LOCK THESE)
+
+Quantity sirf donor ke accept pe change hoti hai
+
+Visibility ≠ availability
+
+First request = first decision, not first guarantee
+
+Donor ka decision final hota hai
+
+System spam aur unfair advantage ko automatically block karta hai
+
+✅ SYSTEM RULES – STATUS
+
+Quantity rules ✅
+
+Fairness rules ✅
+
+Auto behaviour rules ✅
+
+Cooldown rules ✅
+
+👉 System rules Phase-1 ke liye COMPLETE ho chuke hain.
+
+
+
+
+
+Models for Request :
+
+🔒 FINAL REQUEST MODEL – DESIGN LOCK (NO CODE)
+Relationships
+
+Request → Item
+
+Request → Receiver (User)
+
+Quantity
+
+requested_quantity
+
+approved_quantity
+
+Status
+
+pending
+
+accepted
+
+rejected
+
+completed
+
+Time fields
+
+created_at
+
+accepted_at
+
+completed_at
+
+Behaviour notes
+
+Partial accept = approved_quantity < requested_quantity
+
+Donor always resolved via item.owner
+
+Cooldown enforced via logic, not DB

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incoming Requests | Mein Tera Parivaar</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#E9FBEF",
+                        primary: "#1F3D2B",
+                        primaryLight: "#63846B",
+                        secondary: "#2F5A44",
+                        dark: "#183226",
+                    },
+                    fontFamily: {
+                        doppioOne: "Doppio One",
+                        dmSans: "DM Sans",
+                        inter: "Inter",
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Doppio One', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-bg min-h-screen">
+
+    <!-- ================= HEADER ================= -->
+    <header class="w-screen max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div
+            class="bg-white rounded-xl sm:rounded-full shadow-md flex flex-col sm:flex-row items-center justify-between px-6 py-3 gap-4">
+            <!-- Logo (clickable to home) -->
+            <a href="{% url 'public_items' %}" class="flex items-center gap-3 hover:opacity-80 transition">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-[#244734] to-primary flex items-center justify-center text-white font-bold text-lg">
+                    M
+                </div>
+                <span class="text-xl font-['Doppio_One'] text-gray-800">
+                    Mein Tera Parivaar
+                </span>
+            </a>
+            <span class="text-xl font-['Doppio_One'] text-gray-800 hidden md:inline">
+                Incoming Requests
+            </span>
+            <div class="flex gap-3">
+                <a href="{% url 'accepted_requests' %}"
+                    class="border border-green-600 text-green-600 px-5 py-2 rounded-full hover:bg-green-600 hover:text-white transition text-sm font-medium">
+                    Accepted Requests
+                </a>
+                <a href="{% url 'dashboard' %}"
+                    class="border border-primary text-primary px-5 py-2 rounded-full hover:bg-primary hover:text-white transition text-sm font-medium">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-10">
+            <div
+                class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z">
+                    </path>
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                </svg>
+                Pending Donation Requests
+            </div>
+            <h1 class="text-3xl md:text-4xl font-['Doppio_One'] text-[#01212D] mb-3">
+                Review Your Requests
+            </h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Below are pending requests for items you have listed for donation. Accept or reject each request to help
+                those in need.
+            </p>
+        </div>
+
+        <!-- Requests Grid -->
+        <section>
+            {% if pending_requests %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for req in pending_requests %}
+                <div class="bg-white rounded-3xl shadow-xl border border-black/5 overflow-hidden">
+
+                    <!-- Card Header with Gradient -->
+                    <div class="bg-gradient-to-r from-primary to-secondary p-5 text-white">
+                        <h3 class="text-xl font-bold mb-1">{{ req.item.name }}</h3>
+                        <div class="flex items-center gap-2 text-green-100 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
+                                </path>
+                            </svg>
+                            <span>{{ req.item.category }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-6">
+                        <!-- Requester Info -->
+                        <div class="flex items-start gap-3 mb-4">
+                            <div
+                                class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                {{ req.receiver.name|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Requested by</p>
+                                <p class="font-semibold text-gray-800">{{ req.receiver.name }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Quantity Info -->
+                        <div
+                            class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-4 mb-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs text-gray-500 mb-1">Requested</p>
+                                    <p class="text-2xl font-bold text-primary">{{ req.requested_quantity }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 mb-1">Available</p>
+                                    <p class="text-2xl font-bold text-gray-700">{{ req.item.available_quantity }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div class="mb-5">
+                            <span
+                                class="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-full bg-yellow-100 text-yellow-700 font-semibold">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                Pending Review
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <form method="post" action="{% url 'accept_request' req.id %}" class="flex-1">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="w-full px-6 py-3 rounded-full bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Accept
+                                </button>
+                            </form>
+
+                            <form method="post" action="{% url 'reject_request' req.id %}" class="flex-1">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="w-full px-6 py-3 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Reject
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="bg-white rounded-3xl shadow-xl border border-black/5 p-12 text-center">
+                <div
+                    class="w-20 h-20 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                        </path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3">No Pending Requests</h3>
+                <p class="text-gray-600 mb-6">
+                    You don't have any pending donation requests at the moment.
+                </p>
+                <a href="{% url 'accepted_requests' %}"
+                    class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg hover:scale-105 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    View Accepted Requests
+                </a>
+            </div>
+            {% endif %}
+        </section>
+
+    </main>
+
+</body>
+
+</html>

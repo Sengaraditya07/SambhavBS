@@ -1,0 +1,325 @@
+/* Nav */
+.nav-pill {
+    width: 100%;
+    max-width: 1223px;
+
+    background: #ffffff;
+    border-radius: 448px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Brand */
+.nav-brand {
+    font-family: 'Doppio One', sans-serif;
+    font-size: 28px;
+    line-height: 66px;
+    color: #253C2C;
+}
+
+/* Desktop links */
+.nav-links {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: #253C2C;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover {
+    opacity: 0.7;
+}
+
+/* Mobile toggle */
+.nav-toggle {
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #253C2C;
+}
+
+/* Mobile menu */
+.mobile-menu {
+    position: absolute;
+    top: 120px;
+    width: calc(100% - 32px);
+    max-width: 420px;
+
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+
+    transition: all 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: #253C2C;
+    text-decoration: none;
+}
+
+/* Active state */
+.mobile-menu.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .nav-pill {
+        height: 80px;
+        padding: 0 24px;
+    }
+
+    .nav-brand {
+        font-size: 22px;
+    }
+}
+
+/* nav end */
+
+/* about section */
+.about-text {
+    max-width: 582px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.about-text .subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8D8BA7;
+}
+
+.about-text .heading {
+    font-family: 'Doppio One', sans-serif;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.4;
+    color: #01212D;
+}
+
+.about-text .paragraph {
+    font-family: 'Doppio One', sans-serif;
+    font-size: clamp(15px, 2.2vw, 18px);
+    line-height: 1.7;
+    color: #9795B5;
+}
+
+.about-text .secondary-btn {
+    width: fit-content;
+    padding: 14px 22px;
+    border-radius: 30px;
+    border: 1px solid #1F3D2B;
+    font-family: 'Doppio One', sans-serif;
+    font-size: 16px;
+    color: #1F3D2B;
+    cursor: pointer;
+}
+
+.group-wrapper {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 555.64 / 501;
+    margin: auto;
+}
+
+.group-39486 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.container-grey {
+    position: absolute;
+    width: 80.2%;
+    height: 74.8%;
+    left: 9.9%;
+    top: 12.7%;
+    background: rgba(144, 144, 144, 0.2);
+    border-radius: 1.6%;
+    transform: scaleX(-1);
+}
+
+.container-green {
+    position: absolute;
+    background: #63846B;
+    border-radius: 3%;
+}
+
+.container-green.left {
+    width: 46.7%;
+    height: 40.7%;
+    left: 0;
+    top: 19.6%;
+}
+
+.container-green.right {
+    width: 47%;
+    height: 41%;
+    left: 53%;
+    top: 39.7%;
+}
+
+.container-image {
+    position: absolute;
+    width: 66.4%;
+    height: 100%;
+    left: 16.9%;
+    top: 0;
+    background: url("/media/about-img.png") center/cover no-repeat;
+    border: 1px solid #D4D2E3;
+    border-radius: 4%;
+    box-sizing: border-box;
+}
+
+.trust-section {
+    max-width: 673px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 0 16px;
+}
+
+.trust-section .trust-heading {
+    font-family: 'Doppio One', sans-serif;
+    font-weight: 400;
+    font-size: clamp(32px, 6vw, 58px);
+    line-height: 1.15;
+    color: #01212D;
+}
+
+.trust-section .trust-paragraph {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.7;
+    color: #9795B5;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.trust-image-wrapper {
+    max-width: 1140px;
+    margin: 48px auto 0;
+    padding: 0 16px;
+}
+
+.trust-image {
+    width: 100%;
+    aspect-ratio: 1140 / 528;
+    background: url("/media/trust-img.png") center/cover no-repeat;
+    border-radius: 25px 25px 0 0;
+}
+
+/* features section */
+.feature-card {
+    min-width: 260px;
+    height: 360px;
+    padding: 28px;
+    border-radius: 26px;
+
+    background: linear-gradient(180deg, #253C2C 0%, #6D7B70 100%);
+    color: white;
+
+    position: relative;
+
+    opacity: 0.45;
+    transform: scale(0.92);
+    filter: saturate(0.8) brightness(0.9);
+
+    transition:
+        transform 0.6s ease,
+        opacity 0.6s ease,
+        filter 0.6s ease;
+}
+
+/* ACTIVE CARD */
+.feature-card.active {
+    opacity: 1;
+    transform: scale(1);
+    filter: saturate(1) brightness(1);
+}
+
+/* Index stays subtle */
+.feature-index {
+    position: absolute;
+    bottom: -40px;
+    /* push slightly outside */
+    right: -30px;
+
+    font-family: 'Doppio One', sans-serif;
+    font-size: 350px;
+    line-height: 1;
+
+    color: transparent;
+    -webkit-text-stroke: 3px white;
+    opacity: 0.15;
+
+    pointer-events: none;
+    font-weight: 400;
+}
+
+
+.feature-card h4 {
+    font-family: 'Doppio One';
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.feature-card p {
+    font-family: 'DM Sans';
+    font-size: 14px;
+    line-height: 22px;
+    opacity: 0.9;
+}
+
+/* Desktop enhancement */
+@media (min-width: 1024px) {
+    .feature-card {
+        min-width: 300px;
+        height: 420px;
+        padding: 32px;
+    }
+
+    .feature-index {
+        font-size: 380px;
+    }
+
+    .feature-card h4 {
+        font-size: 28px;
+    }
+
+    .feature-card p {
+        font-size: 15px;
+        line-height: 24px;
+    }
+}
+
+/* feature section end */

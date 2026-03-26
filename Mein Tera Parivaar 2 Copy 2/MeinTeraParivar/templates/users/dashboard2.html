@@ -1,0 +1,336 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Mein Tera Parivaar</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#E9FBEF",
+                        primary: "#1F3D2B",
+                        primaryLight: "#63846B",
+                        secondary: "#2F5A44",
+                        dark: "#183226",
+                    },
+                    fontFamily: {
+                        doppioOne: "Doppio One",
+                        dmSans: "DM Sans",
+                        inter: "Inter",
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Doppio One', sans-serif;
+        }
+
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+
+<body class="bg-bg min-h-screen">
+
+    <!-- ================= HEADER ================= -->
+    <header class="w-screen max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div
+            class="bg-white rounded-xl sm:rounded-full shadow-md flex flex-col sm:flex-row items-center justify-between px-6 py-3 gap-4">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-[#244734] to-primary flex items-center justify-center text-white font-bold text-lg">
+                    M
+                </div>
+                <span class="text-xl font-['Doppio_One'] text-gray-800">
+                    Mein Tera Parivaar
+                </span>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+                <span class="text-gray-700 font-medium">
+                    Welcome, {{ request.user }}
+                </span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="border border-red-300 text-red-600 px-5 py-2 rounded-full hover:bg-red-50 transition">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- ALERT (Give-to-Get Rule) -->
+        {% if not can_receive %}
+        <div
+            class="mb-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl p-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-6 h-6 text-yellow-900" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <p class="text-sm text-yellow-900">
+                        List at least <strong>2 items</strong> to start receiving donations from the community.
+                    </p>
+                </div>
+                <a href="{% url 'add_item' %}"
+                    class="bg-yellow-500 text-white px-6 py-2 rounded-full hover:bg-yellow-600 transition text-sm font-semibold whitespace-nowrap">
+                    Add Item Now
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- ================= HERO SECTION ================= -->
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden mb-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                <!-- Left: Hero Illustration -->
+                <div class="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 p-8 lg:p-12 flex items-center justify-center relative overflow-hidden"
+                    style="background-image: linear-gradient(to bottom right, rgba(233, 251, 239, 0.9), rgba(219, 234, 254, 0.9), rgba(243, 232, 255, 0.9)), url('/media/dashboard-img.png'); background-size: cover; background-position: center;">
+                    <!-- Inline SVG Illustration -->
+                    <svg viewBox="0 0 400 300" class="w-full max-w-md" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background circles -->
+                        <circle cx="200" cy="150" r="120" fill="#E9FBEF" opacity="0.5" />
+                        <circle cx="180" cy="130" r="80" fill="#2F5A44" opacity="0.1" />
+
+                        <!-- People sharing -->
+                        <!-- Person 1 (left) -->
+                        <circle cx="120" cy="140" r="25" fill="#1F3D2B" />
+                        <path d="M 95 165 Q 120 180 145 165" fill="#2F5A44" />
+
+                        <!-- Person 2 (right) -->
+                        <circle cx="280" cy="140" r="25" fill="#63846B" />
+                        <path d="M 255 165 Q 280 180 305 165" fill="#2F5A44" />
+
+                        <!-- Hands exchanging/sharing -->
+                        <path d="M 145 175 L 180 185" stroke="#1F3D2B" stroke-width="8" stroke-linecap="round" />
+                        <path d="M 255 175 L 220 185" stroke="#63846B" stroke-width="8" stroke-linecap="round" />
+
+                        <!-- Box/item being shared -->
+                        <rect x="185" y="175" width="30" height="30" fill="#E9FBEF" stroke="#1F3D2B" stroke-width="2"
+                            rx="4" />
+                        <line x1="195" y1="175" x2="195" y2="205" stroke="#1F3D2B" stroke-width="1" />
+                        <line x1="205" y1="175" x2="205" y2="205" stroke="#1F3D2B" stroke-width="1" />
+
+                        <!-- Hearts -->
+                        <path d="M 200 100 L 205 95 Q 210 90 215 95 Q 220 90 225 95 L 220 100 L 200 120 Z"
+                            fill="#FF6B6B" opacity="0.8" />
+                        <path d="M 160 220 L 163 217 Q 166 214 169 217 Q 172 214 175 217 L 172 220 L 160 232 Z"
+                            fill="#FF6B6B" opacity="0.6" />
+                        <path d="M 240 220 L 243 217 Q 246 214 249 217 Q 252 214 255 217 L 252 220 L 240 232 Z"
+                            fill="#FF6B6B" opacity="0.6" />
+
+                        <!-- Decorative elements -->
+                        <circle cx="80" cy="80" r="8" fill="#2F5A44" opacity="0.3" />
+                        <circle cx="320" cy="80" r="10" fill="#63846B" opacity="0.3" />
+                        <circle cx="70" cy="240" r="6" fill="#1F3D2B" opacity="0.3" />
+                        <circle cx="330" cy="240" r="7" fill="#2F5A44" opacity="0.3" />
+
+                        <!-- Connection lines -->
+                        <path d="M 120 165 Q 200 185 280 165" stroke="#2F5A44" stroke-width="2" stroke-dasharray="5,5"
+                            opacity="0.3" fill="none" />
+                    </svg>
+                </div>
+
+                <!-- Right: Welcome Content -->
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+                    <div
+                        class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4 w-fit">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z">
+                            </path>
+                        </svg>
+                        Your Dashboard
+                    </div>
+                    <h1 class="text-4xl lg:text-5xl font-['Doppio_One'] text-gray-900 mb-4 leading-tight">
+                        Welcome Back!
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Share what you have, receive what you need. Together, we're building a community of giving.
+                    </p>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-green-50 to-white border-2 border-green-200 rounded-xl p-4">
+                            <p class="text-sm text-gray-600 mb-1">My Items</p>
+                            <p class="text-3xl font-bold text-primary">{{ my_items_count|default:"0" }}</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-200 rounded-xl p-4">
+                            <p class="text-sm text-gray-600 mb-1">My Requests</p>
+                            <p class="text-3xl font-bold text-blue-700">{{ my_requests_count|default:"0" }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= QUICK ACTIONS ================= -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+
+            <!-- My Items Card -->
+            <a href="{% url 'my_items_list' %}" class="stat-card bg-white rounded-2xl shadow-md p-6 block">
+                <div class="flex items-start justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">My Items</h3>
+                <p class="text-sm text-gray-600 mb-3">Items you've listed for donation</p>
+                <p class="text-3xl font-bold text-primary">{{ my_items_count|default:"0" }}</p>
+            </a>
+
+            <!-- My Requests Card -->
+            <a href="{% url 'my_requests' %}" class="stat-card bg-white rounded-2xl shadow-md p-6 block">
+                <div class="flex items-start justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">My Requests</h3>
+                <p class="text-sm text-gray-600 mb-3">Items you've requested</p>
+                <p class="text-3xl font-bold text-blue-700">{{ my_requests_count|default:"0" }}</p>
+            </a>
+
+            <!-- Browse Items Card -->
+            <a href="{% url 'public_items' %}" class="stat-card bg-white rounded-2xl shadow-md p-6 block">
+                <div class="flex items-start justify-between mb-4">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-1">Browse Items</h3>
+                <p class="text-sm text-gray-600">Explore available donations</p>
+            </a>
+
+        </div>
+
+        <!-- ================= SECONDARY ACTIONS ================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Incoming Requests Card -->
+            <div class="action-card bg-white rounded-2xl shadow-md p-6">
+                <div class="flex items-start gap-4 mb-4">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z">
+                            </path>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">Incoming Requests</h3>
+                        <p class="text-sm text-gray-600">Review and manage donation requests</p>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-200 rounded-xl p-4 mb-4">
+                    <p class="text-sm text-gray-600 mb-1">Pending Requests</p>
+                    <p class="text-4xl font-bold text-orange-600">{{ incoming_requests_count|default:"0" }}</p>
+                </div>
+                <div class="flex gap-3">
+                    <a href="{% url 'incoming_requests' %}"
+                        class="flex-1 text-center px-4 py-2.5 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-semibold hover:shadow-lg transition">
+                        View Pending
+                    </a>
+                    <a href="{% url 'accepted_requests' %}"
+                        class="flex-1 text-center px-4 py-2.5 rounded-full border-2 border-green-500 text-green-600 font-semibold hover:bg-green-50 transition">
+                        Accepted
+                    </a>
+                </div>
+            </div>
+
+            <!-- Add Item CTA Card -->
+            <div class="action-card bg-gradient-to-br from-primary to-secondary rounded-2xl shadow-md p-6 text-white">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold mb-1">Share & Give</h3>
+                        <p class="text-sm text-green-100">Make a difference today</p>
+                    </div>
+                </div>
+                <p class="text-green-100 mb-6 leading-relaxed">
+                    Have something to donate? List it now and help someone in need. Every item makes a difference in our
+                    community.
+                </p>
+                <a href="{% url 'add_item' %}"
+                    class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-primary font-bold hover:bg-green-50 transition shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Add Item Now
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Signup – Mein Tera Parivaar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Doppio One', sans-serif;
+        }
+
+        input,
+        select {
+            width: 100%;
+            background-color: #f3f4f6;
+            padding: 14px 18px;
+            border-radius: 9999px;
+            outline: none;
+        }
+
+        label {
+            font-size: 0.875rem;
+            color: #4b5563;
+            display: block;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-[#E9FFF3]">
+
+    <!-- ================= PAGE WRAPPER ================= -->
+    <section class="min-h-screen grid grid-cols-1 md:grid-cols-5">
+
+        <!-- LEFT SPACE -->
+        <div class="hidden md:block md:col-span-2"></div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="hidden md:block md:col-span-3 relative">
+            <div class="absolute inset-0 bg-gradient-to-br from-[#1F3D2B] to-[#2F5A44]"
+                style="background-image: url('/media/dashboard-img.png'); background-size: cover; background-position: right;">
+            </div>
+        </div>
+
+        <!-- ================= FORM ================= -->
+        <div class="flex items-center justify-left md:absolute md:inset-0 px-4 sm:px-6 sm:ml-32">
+            <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-6 sm:p-8 md:px-10 py-5 ">
+
+                <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800">
+                    Get in touch today
+                </h2>
+                <p class="text-sm text-gray-400 mt-1">
+                    After signup, your account will be activated once approved by admin.
+                </p>
+
+                {% if form.errors %}
+                <div class="bg-red-100 text-red-700 p-3 rounded-lg mt-4 text-sm">
+                    Please fix the errors below.
+                </div>
+                {% endif %}
+
+                <form method="post" class="mt-6 sm:mt-8">
+                    {% csrf_token %}
+
+                    <!-- GRID: First 4 fields in 2x2 layout -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                        {% for field in form %}
+                        {% if forloop.counter <= 4 %} <div>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.field.widget.input_type == "password" %}
+                            <div class="relative">
+                                {{ field }}
+                                <button type="button" onclick="togglePassword(this)"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                            c4.478 0 8.268 2.943 9.542 7
+                                            -1.274 4.057-5.064 7-9.542 7
+                                            -4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </button>
+                            </div>
+                            {% else %}
+                            {{ field }}
+                            {% endif %}
+
+                            {% if field.errors %}
+                            <p class="text-red-500 text-xs mt-1">
+                                {{ field.errors|striptags }}
+                            </p>
+                            {% endif %}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+            </div>
+
+            <!-- STACKED: Remaining fields -->
+            <div class="space-y-4">
+                {% for field in form %}
+                {% if forloop.counter > 4 %}
+                <div>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% if field.field.widget.input_type == "password" %}
+                    <div class="relative">
+                        {{ field }}
+                        <button type="button" onclick="togglePassword(this)"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                            c4.478 0 8.268 2.943 9.542 7
+                                            -1.274 4.057-5.064 7-9.542 7
+                                            -4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                    {% else %}
+                    {{ field }}
+                    {% endif %}
+
+                    {% if field.errors %}
+                    <p class="text-red-500 text-xs mt-1">
+                        {{ field.errors|striptags }}
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            <button type="submit"
+                class="w-full sm:w-auto mt-6 bg-[#1F3D2B] text-white px-8 py-3 rounded-full hover:bg-[#173021] transition">
+                Sign Up
+            </button>
+            </form>
+
+            <p class="text-sm text-gray-400 mt-6 text-center sm:text-left">
+                <a href="{% url 'public_items' %}" class="text-gray-500 hover:text-primary transition">
+                    ← Back to Home
+                </a>
+                <span class="mx-2">·</span>
+                Already have an account?
+                <a href="{% url 'login' %}" class="text-green-700 font-medium hover:underline">
+                    Login
+                </a>
+            </p>
+
+        </div>
+        </div>
+
+    </section>
+
+    <script>
+        // Add styling to form fields
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.classList.add('w-full', 'bg-gray-100', 'px-4', 'py-3', 'rounded-full', 'focus:ring-2', 'focus:ring-[#1F3D2B]');
+            });
+        });
+
+        function togglePassword(btn) {
+            const input = btn.previousElementSibling;
+
+            if (input.type === "password") {
+                input.type = "text";
+                btn.innerHTML = eyeOff;
+            } else {
+                input.type = "password";
+                btn.innerHTML = eyeOn;
+            }
+        }
+
+        const eyeOn = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5
+                   c4.478 0 8.268 2.943 9.542 7
+                   -1.274 4.057-5.064 7-9.542 7
+                   -4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+    `;
+
+        const eyeOff = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 3l18 18" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10.585 10.585A2 2 0 0012 14
+                   a2 2 0 001.414-.586" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5
+                   c2.21 0 4.254.712 5.942 1.918" />
+        </svg>
+    `;
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Item | Mein Tera Parivaar</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#E9FBEF",
+                        primary: "#1F3D2B",
+                        primaryLight: "#63846B",
+                        secondary: "#2F5A44",
+                        dark: "#183226",
+                    },
+                    fontFamily: {
+                        doppioOne: "Doppio One",
+                        dmSans: "DM Sans",
+                        inter: "Inter",
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Doppio One', sans-serif;
+        }
+
+        /* Custom form input styling */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #d1d5db;
+            background-color: white;
+            transition: border-color 0.2s, outline 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #1F3D2B;
+            outline: none;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #d1d5db;
+            background-color: white;
+            transition: border-color 0.2s, outline 0.2s;
+            resize: none;
+        }
+
+        .form-textarea:focus {
+            border-color: #1F3D2B;
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            border: 2px solid #d1d5db;
+            background-color: white;
+            transition: border-color 0.2s, outline 0.2s;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: #1F3D2B;
+            outline: none;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Hide default file input */
+        input[type="file"] {
+            display: none;
+        }
+
+        /* Custom file upload button */
+        .file-upload-wrapper {
+            position: relative;
+            border: 2px dashed #d1d5db;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            background: linear-gradient(to bottom right, #f9fafb, white);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: #1F3D2B;
+            background: linear-gradient(to bottom right, #ecfdf5, white);
+        }
+
+        /* Progress indicator */
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .progress-dot {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .progress-dot.active {
+            background-color: #1F3D2B;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-dot.inactive {
+            background-color: #e5e7eb;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body class="bg-bg min-h-screen">
+
+    <!-- ================= HEADER ================= -->
+    <header class="w-screen max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div
+            class="bg-white rounded-xl sm:rounded-full shadow-md flex flex-col sm:flex-row items-center justify-between px-6 py-3 gap-4">
+            <!-- Logo (clickable to home) -->
+            <a href="{% url 'public_items' %}" class="flex items-center gap-3 hover:opacity-80 transition">
+                <div
+                    class="w-10 h-10 rounded-full bg-gradient-to-br from-[#244734] to-primary flex items-center justify-center text-white font-bold text-lg">
+                    M
+                </div>
+                <span class="text-xl font-['Doppio_One'] text-gray-800">
+                    Mein Tera Parivaar
+                </span>
+            </a>
+            <span class="text-xl font-['Doppio_One'] text-gray-800 hidden md:inline">
+                Add New Item
+            </span>
+            <div class="flex items-center gap-3">
+                <a href="{% url 'dashboard' %}"
+                    class="border border-primary text-primary px-5 py-2 rounded-full hover:bg-primary hover:text-white transition text-sm font-medium">
+                    Dashboard
+                </a>
+                <a href="{% url 'public_items' %}"
+                    class="border border-secondary text-secondary px-5 py-2 rounded-full hover:bg-secondary hover:text-white transition text-sm font-medium hidden sm:inline-block">
+                    Browse Items
+                </a>
+                <a href="{% url 'my_items_list' %}"
+                    class="border border-gray-400 text-gray-700 px-5 py-2 rounded-full hover:bg-gray-100 transition text-sm font-medium">
+                    ← My Items
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- Hero Section -->
+        <div class="text-center mb-10">
+            <div
+                class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z">
+                    </path>
+                </svg>
+                Share What You Don't Need
+            </div>
+            <h1 class="text-3xl md:text-4xl font-['Doppio_One'] text-[#01212D] mb-3">
+                List Your Item for Donation
+            </h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Help someone in need by donating items you no longer use. Fill in the details below to list your item.
+            </p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white rounded-3xl shadow-xl border border-black/5 overflow-hidden">
+
+            <!-- Form Header with Gradient -->
+            <div class="bg-gradient-to-r from-primary to-secondary p-6 text-white">
+                <h2 class="text-2xl font-bold mb-2">Item Details</h2>
+                <p class="text-green-100 text-sm">All fields marked with * are required</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="p-8">
+                {% csrf_token %}
+
+                <!-- Two Column Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+
+                        <!-- Item Name -->
+                        <div>
+                            <label class="form-label flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
+                                    </path>
+                                </svg>
+                                Item Name *
+                            </label>
+                            {{ form.name }}
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label class="form-label flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z">
+                                    </path>
+                                </svg>
+                                Category *
+                            </label>
+                            <div class="relative">
+                                {{ form.category }}
+                                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Condition -->
+                        <div>
+                            <label class="form-label flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Condition *
+                            </label>
+                            <div class="relative">
+                                {{ form.condition }}
+                                <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div>
+                            <label class="form-label flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                Quantity *
+                            </label>
+                            {{ form.total_quantity }}
+                        </div>
+
+                        <!-- Description -->
+                        <div>
+                            <label class="form-label flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h7"></path>
+                                </svg>
+                                Description *
+                            </label>
+                            {{ form.description }}
+                            <p class="text-xs text-gray-500 mt-2">Provide details about the item's features, usage, and
+                                any other relevant information.</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+
+                        <!-- Image Upload -->
+                        <div>
+                            <label class="form-label flex items-center gap-2 mb-4">
+                                Item Image
+                            </label>
+
+                            <input type="file" id="id_image" name="image" accept="image/*" class="hidden">
+
+                            <!-- Upload Area (shown when no image) -->
+                            <div id="imageUploadBox"
+                                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 hover:border-primary transition duration-200 cursor-pointer bg-white p-6 text-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                    </path>
+                                </svg>
+                                <p class="text-gray-700 font-semibold">Click to upload image</p>
+                                <p class="text-sm text-gray-500">PNG, JPG up to 10MB</p>
+                            </div>
+
+                            <!-- Preview Area (shown when image uploaded) -->
+                            <div id="imagePreviewContainer"
+                                class="hidden relative rounded-lg border-2 border-gray-300 bg-white p-4">
+                                <img id="imagePreview" src="" alt="Image Preview"
+                                    class="w-full max-h-64 object-contain rounded-md mx-auto">
+                                <button type="button" id="removeImageBtn"
+                                    class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg transition">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <!-- Video Upload -->
+                        <div>
+                            <label class="form-label flex items-center gap-2 mb-4">
+                                Item Video (Optional)
+                            </label>
+
+                            <input type="file" id="id_video" name="video" accept="video/*" class="hidden">
+
+                            <!-- Upload Area (shown when no video) -->
+                            <div id="videoUploadBox"
+                                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 hover:border-primary transition duration-200 cursor-pointer bg-white p-6 text-center">
+                                <svg class="w-12 h-12 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                                    </path>
+                                </svg>
+                                <p class="text-gray-700 font-semibold">Click to upload video</p>
+                                <p class="text-sm text-gray-500">MP4, AVI up to 50MB</p>
+                            </div>
+
+                            <!-- Preview Area (shown when video uploaded) -->
+                            <div id="videoPreviewContainer"
+                                class="hidden relative rounded-lg border-2 border-gray-300 bg-white p-4">
+                                <video id="videoPreview" class="w-full max-h-64 object-contain rounded-md mx-auto"
+                                    controls>
+                                </video>
+                                <button type="button" id="removeVideoBtn"
+                                    class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg transition">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <!-- Info Box -->
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-xl p-5">
+                            <div class="flex gap-3">
+                                <svg class="w-6 h-6 text-blue-600 flex-shrink-0" fill="currentColor"
+                                    viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <div>
+                                    <h3 class="font-bold text-blue-900 mb-1">Quick Tips</h3>
+                                    <ul class="text-sm text-blue-800 space-y-1">
+                                        <li>• Add clear photos for better visibility</li>
+                                        <li>• Be honest about item condition</li>
+                                        <li>• Your item will be reviewed by admin</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="mt-10 pt-6 border-t border-gray-200 flex flex-col sm:flex-row gap-4 justify-end">
+                    <a href="{% url 'my_items_list' %}"
+                        class="px-6 py-3 rounded-full border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition text-center">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                        class="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        Submit Item for Review
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    <script>
+        // IMAGE UPLOAD HANDLING
+        const imageInput = document.getElementById("id_image");
+        const imageUploadBox = document.getElementById("imageUploadBox");
+        const imagePreview = document.getElementById("imagePreview");
+        const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+        const removeImageBtn = document.getElementById("removeImageBtn");
+
+        // Click upload area to select image
+        imageUploadBox.addEventListener("click", () => {
+            imageInput.click();
+        });
+
+        // When image is selected, show preview and hide upload area
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    imageUploadBox.classList.add("hidden");
+                    imagePreviewContainer.classList.remove("hidden");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Remove image and show upload area again
+        removeImageBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            imageInput.value = "";
+            imagePreview.src = "";
+            imagePreviewContainer.classList.add("hidden");
+            imageUploadBox.classList.remove("hidden");
+        });
+
+
+        // VIDEO UPLOAD HANDLING
+        const videoInput = document.getElementById("id_video");
+        const videoUploadBox = document.getElementById("videoUploadBox");
+        const videoPreview = document.getElementById("videoPreview");
+        const videoPreviewContainer = document.getElementById("videoPreviewContainer");
+        const removeVideoBtn = document.getElementById("removeVideoBtn");
+
+        // Click upload area to select video
+        videoUploadBox.addEventListener("click", () => {
+            videoInput.click();
+        });
+
+        // When video is selected, show preview and hide upload area
+        videoInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const videoURL = URL.createObjectURL(file);
+                videoPreview.src = videoURL;
+                videoUploadBox.classList.add("hidden");
+                videoPreviewContainer.classList.remove("hidden");
+            }
+        });
+
+        // Remove video and show upload area again
+        removeVideoBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            videoInput.value = "";
+            videoPreview.src = "";
+            videoPreviewContainer.classList.add("hidden");
+            videoUploadBox.classList.remove("hidden");
+        });
+
+
+        // Add form-input class to all Django form fields
+        document.addEventListener('DOMContentLoaded', function () {
+            // Text inputs
+            const textInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+            textInputs.forEach(input => {
+                input.classList.add('form-input');
+            });
+
+            // Textareas
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.classList.add('form-textarea');
+                textarea.rows = 5;
+            });
+
+            // Selects
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                select.classList.add('form-select');
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

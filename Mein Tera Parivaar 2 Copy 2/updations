@@ -1,0 +1,7 @@
+1> Unlist my items button need to be add.
+2> When we logout and then redirect to login page if i click on back tab it gets me back to dashboard it should not happen. It should redirect to login page only.
+3> When I restart my server and render to main page sometime it shows me loggged in 
+4> First name should be filled with Name field we created 
+5> If quantity is zero then it should not show in my items page
+6>There Should be the option to go to dashboard from my public list
+7> There Should be Welcome 

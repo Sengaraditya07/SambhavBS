@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior: smooth;">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mai Tera Pariwaar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: "#E9F9EE",
+            primary: "#1F3D2B",
+            primaryLight: "#63846B",
+            secondary: "#2F5A44",
+            dark: "#183226",
+          },
+          fontFamily: {
+            doppioOne: "Doppio One",
+            dmSans: "DM Sans",
+          },
+          borderRadius: {
+            pill: "9999px"
+          }
+        }
+      }
+    }
+  </script>
+
+
+</head>
+
+<body class="bg-bg text-primary font-[Doppio One]">
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="w-full fixed top-4 left-0 z-50 flex justify-center px-4">
+    <div class="nav-pill">
+
+      <!-- Logo / Heading -->
+      <div class="nav-brand">
+        Main Tera Parivaar
+      </div>
+
+      <!-- Desktop Nav -->
+      <ul class="nav-links hidden md:flex gap-6 items-center">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#trust">Trust</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#contact">Contact</a></li>
+
+        {% if user.is_authenticated %}
+        <!-- Authenticated User: Show Profile Button -->
+        <li><a href="/dashboard"><button class="bg-secondary text-white px-6 py-2 rounded-full">Profile</button></a>
+        </li>
+        {% else %}
+        <!-- Guest User: Show Login and Signup -->
+        <li><a href="/accounts/login"><button
+              class="bg-transparent border-2 border-secondary text-secondary px-6 py-2 rounded-full">Login</button></a>
+        </li>
+        <li><a href="/signup"><button class="bg-secondary text-white px-6 py-2 rounded-full">Sign Up</button></a></li>
+        {% endif %}
+      </ul>
+
+      <!-- Mobile Toggle -->
+      <button id="nav-toggle" class="md:hidden nav-toggle">
+        ☰
+      </button>
+
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu md:hidden">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#trust">Trust</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+
+      {% if user.is_authenticated %}
+      <!-- Authenticated User: Show Profile Button -->
+      <a href="/dashboard"><button class="bg-secondary text-white px-6 py-2 rounded-full">Profile</button></a>
+      {% else %}
+      <!-- Guest User: Show Login and Signup -->
+      <a href="/accounts/login"><button
+          class="bg-transparent border-2 border-secondary text-secondary px-6 py-2 rounded-full">Login</button></a>
+      <a href="/signup"><button class="bg-secondary text-white px-6 py-2 rounded-full">Sign Up</button></a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ================= HERO ================= -->
+  <section id="home" class="max-w-7xl mx-auto px-6 mt-28">
+    <div class="relative h-[80vh] min-h-[520px] rounded-3xl overflow-hidden grid md:grid-cols-2 items-center">
+
+      {% load static %}
+      <img src="/media/hero-bg.png" alt="Hero background"
+        class="absolute inset-0 w-full h-full object-cover -scale-x-100 opacity-80 sm:opacity-100 z-0" />
+
+      <!-- Optional overlay (helps text contrast) -->
+      <div class="absolute inset-0 bg-gradient-to-br from-dark/20 to-secondary/20 z-0"></div>
+
+      <!-- Content -->
+      <div class="relative z-10 p-10 md:p-14 text-white">
+        <h1 class="text-4xl lg:text-5xl font-semibold">
+          Exchange, Not Spend
+        </h1>
+
+        <h2 class="text-3xl lg:text-4xl font-semibold mt-3">
+          Welcome to Mai Tera Pariwaar
+        </h2>
+
+        <p class="text-gray-200 mt-5 max-w-md leading-relaxed">
+          A community-driven barter platform where unused items find new homes.
+          Give a little, get what you need—no money involved.
+        </p>
+
+        <div class="flex flex gap-4 mt-8 items-center">
+          <a href="/items"
+            class="bg-white text-primary px-4 sm:px-6 py-3 rounded-full font-medium text-xs sm:text-base">
+            Start Exchanging
+          </a>
+
+          <a href="/items" class="border border-white/70 px-4 sm:px-6 py-3 rounded-full text-xs sm:text-base">
+            Browse Items
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about" class="max-w-7xl mx-auto px-6 py-20 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+    <!-- LEFT CONTENT -->
+    <div class="about-text">
+      <span class="subtitle">About us</span>
+
+      <h2 class="heading">
+        Turn your unused items into someone else’s need
+      </h2>
+
+      <p class="paragraph">
+        Why let things collect dust when they can help someone? List items you no longer
+        need and explore what others are offering—simple, transparent, and fair.
+      </p>
+
+      <a href="/items/add" class="secondary-btn bg-transparent">
+        List an item
+      </a>
+    </div>
+
+
+    <!-- RIGHT IMAGE STACK -->
+    <div class="group-wrapper">
+      <div class="group-39486">
+        <div class="container-grey"></div>
+        <div class="container-green left"></div>
+        <div class="container-green right"></div>
+        <div class="container-image"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= TRUST ================= -->
+  <section id="trust">
+    <section class="trust-section">
+      <h2 class="trust-heading">
+        A Fair Barter System <br />
+        Built on Trust
+      </h2>
+
+      <p class="trust-paragraph">
+        To keep the community active and balanced, every user contributes before
+        requesting. Donate 2 items to unlock the ability to request any item you need.
+      </p>
+    </section>
+
+    <div class="trust-image-wrapper">
+      <div class="trust-image"></div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features" class="w-full max-w-7xl mx-auto px-6 py-20
+         flex flex-col md:flex-row gap-14 items-center overflow-hidden">
+
+    <!-- LEFT : TEXT -->
+    <div class="w-full md:w-[60%] text-center md:text-left">
+      <h2 class="font-['Doppio_One'] text-[#01212D]
+             text-3xl sm:text-4xl lg:text-[42px]
+             leading-tight">
+        Discover Features That<br class="hidden sm:block" />
+        Actually Matter
+      </h2>
+
+      <p class="mt-5 sm:mt-6 text-base sm:text-lg
+             text-[#8D8BA7] font-['DM_Sans']
+             max-w-xl mx-auto md:mx-0">
+        Every feature is crafted to make bartering smooth, fair,
+        and genuinely useful for real people.
+      </p>
+
+      <a href="/items">
+        <button class="mt-7 sm:mt-8 px-6 py-3 rounded-full
+             border border-[#1F3D2B]
+             text-[#1F3D2B]">
+          Explore More
+        </button>
+      </a>
+    </div>
+
+    <!-- RIGHT : CAROUSEL -->
+    <div class="w-full md:w-[40%] overflow-hidden">
+      <div id="loop-carousel" class="flex gap-6 sm:gap-8 will-change-transform">
+
+        <!-- Card -->
+        <div class="feature-card">
+          <span class="feature-index">1</span>
+          <h4>Secure Trades</h4>
+          <p>Your exchanges are protected with smart verification.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-index">2</span>
+          <h4>No Cash Needed</h4>
+          <p>Trade what you have for what you actually need.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-index">3</span>
+          <h4>Smart Matching</h4>
+          <p>We surface the best trade opportunities for you.</p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-index">4</span>
+          <h4>Community Driven</h4>
+          <p>Every trade builds trust in the network.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" class="max-w-7xl mx-auto mt-28 px-6 grid md:grid-cols-2 gap-16 items-center">
+
+    <img src="/media/contact-img.png" class="rounded-3xl w-full h-full object-cover" alt="" />
+
+    <div>
+      <span class="text-xs uppercase tracking-widest text-gray-500">Contact Us</span>
+      <h3 class="text-3xl font-semibold mt-3">
+        Have Questions or Suggestions?
+      </h3>
+      <p class="text-gray-600 mt-2">
+        We'd love to hear from you. Reach out for support, feedback, or partnerships.
+      </p>
+
+      <form class="mt-6 space-y-4">
+        <input class="w-full px-4 py-3 rounded-full" placeholder="Name" />
+        <input class="w-full px-4 py-3 rounded-full" placeholder="Email" />
+        <textarea class="w-full px-4 py-3 rounded-2xl" rows="4" placeholder="Your message"></textarea>
+        <button class="px-6 py-3 rounded-full bg-primary text-white">
+          Send message
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="mt-32 bg-white border-t border-gray-200 px-6 pb-6 pt-10">
+    <div class="max-w-7xl mx-auto grid gap-10 md:grid-cols-5 text-sm text-gray-600">
+
+      <!-- Brand -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3">
+          <!-- Replace with logo img if you have -->
+          <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+            M
+          </div>
+          <p class="text-lg font-semibold text-primary">
+            Mai Tera Pariwaar
+          </p>
+        </div>
+
+        <p class="mt-4 max-w-sm leading-relaxed">
+          A community-driven barter platform where people exchange value, not money.
+          Give what you have, get what you need — fairly and securely.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <p class="font-semibold text-primary mb-4">Quick Links</p>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-primary">Browse Items</a></li>
+          <li><a href="#" class="hover:text-primary">Post an Item</a></li>
+          <li><a href="#" class="hover:text-primary">How It Works</a></li>
+          <li><a href="#" class="hover:text-primary">Community Guidelines</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <p class="font-semibold text-primary mb-4">Company</p>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-primary">About Us</a></li>
+          <li><a href="#" class="hover:text-primary">Contact</a></li>
+          <li><a href="#" class="hover:text-primary">Careers</a></li>
+          <li><a href="#" class="hover:text-primary">Blog</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div>
+        <p class="font-semibold text-primary mb-4">Support</p>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:text-primary">Help Center</a></li>
+          <li><a href="#" class="hover:text-primary">FAQs</a></li>
+          <li><a href="#" class="hover:text-primary">Report an Issue</a></li>
+          <li><a href="#" class="hover:text-primary">Trust & Safety</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="mt-14 pt-6 border-t border-gray-200 text-center text-xs text-gray-500">
+      © 2026 <span class="font-medium text-gray-600">Mai Tera Pariwaar</span>.
+      All rights reserved.
+      <span class="block mt-2 md:inline md:mt-0">
+        <a href="#" class="hover:text-primary">Privacy Policy</a> ·
+        <a href="#" class="hover:text-primary">Terms of Service</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+      (function () {
+        const carousel = document.getElementById("loop-carousel");
+        if (!carousel) return;
+
+        let animating = false;
+        let cardWidth = 0;
+
+        function updateCardWidth() {
+          const gap = window.innerWidth < 640 ? 24 : 32;
+          cardWidth = carousel.children[0].offsetWidth + gap;
+        }
+
+        function clearActive() {
+          [...carousel.children].forEach(card =>
+            card.classList.remove("active")
+          );
+        }
+
+        function activateNextCard() {
+          clearActive();
+          // 👇 second card is about to slide into first position
+          if (carousel.children[1]) {
+            carousel.children[1].classList.add("active");
+          }
+        }
+
+        updateCardWidth();
+        window.addEventListener("resize", updateCardWidth);
+
+        setInterval(() => {
+          if (animating) return;
+          animating = true;
+
+          // 🔥 activate BEFORE movement starts
+          activateNextCard();
+
+          // allow browser to register class change
+          requestAnimationFrame(() => {
+            carousel.style.transition = "transform 0.8s ease";
+            carousel.style.transform = `translateX(-${cardWidth}px)`;
+          });
+
+          setTimeout(() => {
+            carousel.style.transition = "none";
+            carousel.appendChild(carousel.firstElementChild);
+            carousel.style.transform = "translateX(0)";
+            animating = false;
+          }, 800);
+        }, 3200);
+      })();
+  </script>
+
+
+  <!-- navbar -->
+  <script>
+    const toggle = document.getElementById("nav-toggle");
+    const menu = document.getElementById("mobile-menu");
+
+    toggle.addEventListener("click", () => {
+      menu.classList.toggle("active");
+    });
+
+    // Smooth scroll with navbar offset
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+
+        // Skip if it's just "#" without a target
+        if (targetId === '#') return;
+
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          const navbarHeight = 100; // Approximate navbar height with spacing
+          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+
+          // Close mobile menu if open
+          menu.classList.remove("active");
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

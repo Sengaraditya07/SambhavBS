@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard | Mein Tera Parivaar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+
+    <style>
+        body {
+            font-family: 'Doppio One', sans-serif;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #3a5a4b, #2e4b3f), url("/media/dashboard-img.png");
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .card .number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            line-height: 1;
+        }
+
+        .card a,
+        .card button {
+            display: inline-block;
+            margin-top: 1rem;
+            background: #1f2f28;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .card a:hover,
+        .card button:hover {
+            background: #243830;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .card .small {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-[#E9FBEF] min-h-screen">
+
+    <!-- ================= HEADER ================= -->
+    <header class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div
+            class="bg-white rounded-xl sm:rounded-full shadow-md flex flex-col sm:flex-row items-center justify-between px-6 py-3 gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#244734] to-[#1F3D2B]"></div>
+                <span class="text-xl font-semibold text-gray-800">
+                    Mein Tera Parivaar
+                </span>
+            </div>
+
+            <div class="flex items-center gap-4 sm:gap-6 text-sm">
+                <span class="text-gray-700 font-medium">
+                    Welcome, {{ request.user }}
+                </span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="border border-red-300 text-red-600 px-5 py-2 rounded-full hover:bg-red-50 transition">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 mt-2">
+
+        <!-- ALERT (Give-to-Get Rule) -->
+        {% if not can_receive %}
+        <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 lg:top-24 lg:right-6 lg:left-auto lg:transform-none z-50 
+                   flex flex-col sm:flex-row items-center justify-between gap-3 
+                   bg-yellow-100 border-2 border-yellow-400 text-yellow-800 
+                   p-3 sm:p-4 rounded-2xl shadow-lg 
+                   max-w-[90%] sm:max-w-md lg:max-w-sm h-fit">
+            <p class="text-xs sm:text-sm text-center sm:text-left">
+                ⚠️ List at least <strong>2 items</strong> to receive.
+            </p>
+            <a href="{% url 'add_item' %}"
+                class="bg-yellow-600 text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-yellow-700 transition text-xs sm:text-sm whitespace-nowrap">
+                Add Item
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- ================= DASHBOARD GRID ================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- LEFT: Hero Card -->
+            <div class="lg:col-span-2 bg-gradient-to-br from-[#244734] to-[#1F3D2B] rounded-3xl overflow-hidden relative shadow-lg min-h-[300px]"
+                style="background-image: linear-gradient(to bottom right, rgba(36, 71, 52, 0.85), rgba(31, 61, 43, 0.85)), url('/media/dashboard-img.png'); background-size: cover; background-position: center;">
+                <div class="absolute inset-0 bg-black/10"></div>
+
+                <div class="relative p-8 sm:p-10 text-white h-full flex flex-col justify-center">
+                    <h2 class="text-xl sm:text-2xl font-medium mb-2">
+                        Mein Tera Parivaar
+                    </h2>
+                    <h1 class="text-4xl sm:text-5xl font-bold leading-tight">
+                        Donate with <span class="text-red-500">❤</span>
+                    </h1>
+                    <p class="mt-4 text-sm sm:text-base opacity-90 max-w-md">
+                        Share what you have, receive what you need. Building a community of giving.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT: Stats Cards (2x2 Grid) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+
+                <!-- My Items Card -->
+                <div class="card">
+                    <h3>My Items</h3>
+                    <p class="number">{{ my_items_count|default:"0" }}</p>
+                    <a href="{% url 'my_items_list' %}">View My Items</a>
+                </div>
+
+                <!-- My Requests Card -->
+                <div class="card">
+                    <h3>My Requests</h3>
+                    <p class="number">{{ my_requests_count|default:"0" }}</p>
+                    <a href="{% url 'my_requests' %}">View Requests</a>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= BOTTOM ROW: 3 Cards ================= -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+
+            <!-- Incoming Requests Card -->
+            <div class="card">
+                <h3>Incoming Requests</h3>
+                <p class="number">{{ incoming_requests_count|default:"0" }}</p>
+                <div class="flex gap-3 mt-4 flex-wrap">
+                    <a href="{% url 'incoming_requests' %}" class="small">Pending</a>
+                    <a href="{% url 'accepted_requests' %}" class="small">Accepted</a>
+                </div>
+            </div>
+
+            <!-- Browse Items Card -->
+            <div class="card">
+                <h3>Browse Items</h3>
+                <p class="text-sm text-gray-200 mt-2 mb-2">
+                    Explore items donated by others across different categories.
+                </p>
+                <a href="{% url 'public_items' %}" class="mt-4">Browse →</a>
+            </div>
+
+            <!-- Add Item Card (Call to Action) -->
+            <div class="card bg-gradient-to-br from-[#1F3D2B] to-[#244734]">
+                <h3>Share & Give</h3>
+                <p class="text-sm text-gray-200 mt-2 mb-2">
+                    Have something to donate? List it now and help someone in need.
+                </p>
+                <a href="{% url 'add_item' %}" class="mt-4 bg-white text-[#1F3D2B] hover:bg-gray-100">Add Item +</a>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
